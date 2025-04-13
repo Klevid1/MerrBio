@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fermeri</title>
+
+    <link rel="stylesheet" href="fermeri.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Courgette&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Courgette&family=Poiret+One&display=swap"
+      rel="stylesheet"
+    />
+
+</head>
+
+<body>
+    <body>
+        <!--Icons-->
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+
+        <nav class="navbar" style="grid-area: navbar;"> 
+          <div class="logo">
+            <a href="fermeri.html"> <img src="logo1.png" alt=""></a>
+          </div>
+        
+          <div class="menu">
+            <a href="fermeri.html">Faqja kryesore</a>
+
+            <a class="form-control2" href="addProduct.html">Shto</a>
+
+            
+            <!-- Dropdown for Filtro -->
+            <div class="dropdown">
+              <button class="dropbtn">Filtro <ion-icon name="chevron-down-outline"></ion-icon></button>
+              <div class="dropdown-content">
+                <label for="filter">Sipas kategorisë:</label>
+                <select id="filter" onchange="loadProducts()">
+                  <option value="all">Të gjitha</option>
+                  <option value="Perime">Perime</option>
+                  <option value="Fruta">Fruta</option>
+                  <option value="Bylmet">Bulmete</option>
+                </select>
+              </div>
+            </div>
+        
+            <!-- Profile Button -->
+            <button class="Login-button" onclick="toggleProfilePopup()">
+              <li>Profili</li>
+            </button>
+          </div>
+        </nav>
+        
+   
+
+    <div class="search" style="grid-area: search;">
+      <input type="text" placeholder="Kerkoni produktin qe deshironi" class="srch-prod" oninput="loadProducts()" />
+        <button><ion-icon name="search-outline"></ion-icon></button>
+    </div>
+
+
+    
+    <!-- ✅ Updated Profile Popup -->
+    <div id="profile-popup" class="profile-popup">
+        <div class="profile-header">Detajet e Profilit</div>
+        <div class="profile-info" id="profile-name">Emri:</div>
+        <div class="profile-info" id="profile-email">Email:</div>
+        <div class="profile-info" id="profile-status">Statusi:</div>
+        <button class="close-btn" onclick="toggleProfilePopup()">Mbyll</button>
+      </div>
+     
+      <h1 style="text-align: start; font-family: 'Courgette', cursive; margin-top: 120px;margin-left: 80px;">Produktet e Mia</h1>
+
+
+
+<!-- Product Display Area -->
+<div id="product-list" class="product-list-container"></div>
+
+<!-- Edit Modal -->
+<div id="edit-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2>Ndrysho Produktin</h2>
+    <form id="edit-form">
+      <input type="hidden" id="edit-index" />
+      <label>Emri:</label>
+      <input type="text" id="edit-name" required />
+      <br><br>
+      <label>Përshkrimi:</label>
+      <textarea id="edit-description" style="width: 400px;height:200px;"></textarea>
+      <label>Çmimi:</label>
+      <input type="number" id="edit-price" required min="0" step="0.01" />
+      <br><br>
+      <label>Kategoria:</label>
+      <select id="edit-category">
+        <option value="Perime">Perime</option>
+        <option value="Fruta">Fruta</option>
+        <option value="Bylmet">Bulmete</option>
+      </select>
+      <br><br>
+      <label>Ndrysho Foto:</label>
+      <input type="file" id="edit-image" accept="image/*" />
+      <img id="current-image" src="" style="max-width: 100px; margin-top: 10px;" />
+      <br><br>
+      <button type="submit" class="product-btn edit-btn" style="margin-top: 15px;">Ruaj Ndryshimet</button>
+    </form>
+  </div>
+</div>
+
+
+    <script> 
+          function toggleProfilePopup() {
+            const popup = document.getElementById("profile-popup");
+            popup.classList.toggle("active");
+    
+            // Load and display user data from localStorage
+            const userData = JSON.parse(localStorage.getItem("user"));
+            if (userData) {
+              document.getElementById("profile-name").textContent =
+                "Name: " + userData.name;
+              document.getElementById("profile-email").textContent =
+                "Email: " + (userData.email || "Not provided");
+              document.getElementById("profile-status").textContent =
+                "Statusi: " + (userData.status || "Unknown");
+            } else {
+              document.getElementById("profile-name").textContent = "Name: Guest";
+              document.getElementById("profile-email").textContent = "Email: -";
+              document.getElementById("profile-status").textContent = "Statusi: -";
+            }
+          }
+    
+          // Optional: Hide profile popup on outside click
+          window.addEventListener("click", function (e) {
+            const popup = document.getElementById("profile-popup");
+            if (!popup.contains(e.target) && !e.target.closest(".Login-button")) {
+              popup.classList.remove("active");
+            }
+          });
+          </script>
+<script>
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+
+  function loadProducts() {
+  const categoryFilter = document.getElementById("filter").value.toLowerCase();
+  const searchTerm = document.querySelector(".srch-prod").value.toLowerCase();
+  const container = document.getElementById("product-list");
+  container.innerHTML = "";
+
+  const filtered = products.filter(p => {
+    const matchesCategory = categoryFilter === "all" || p.category.toLowerCase() === categoryFilter;
+    const matchesSearch = p.name.toLowerCase().includes(searchTerm);
+    return matchesCategory && matchesSearch;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = "<p style='padding: 20px;'>Nuk u gjet asnjë produkt.</p>";
+  }
+
+  filtered.forEach((product, index) => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      ${product.image ? `<img src="${product.image}" alt="${product.name}" />` : ""}
+      <div class="product-info">
+        <h3>${product.name}</h3>
+        <p><strong>Pershkrimi:</strong> ${product.message}</p>
+        <p><strong>Kategoria:</strong> ${product.category}</p>
+        <p><strong>Cmimi:</strong> €${product.price}</p>
+      </div>
+      <div class="button-group">
+        <button class="product-btn edit-btn" onclick="openEditModal(${index})">Edito</button>
+        <button class="product-btn delete-btn" onclick="deleteProduct(${index})">Fshij</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+
+  function deleteProduct(index) {
+    if (confirm("A jeni i sigurt që doni të fshini këtë produkt?")) {
+      products.splice(index, 1);
+      localStorage.setItem("products", JSON.stringify(products));
+      loadProducts();
+    }
+  }
+
+  function openEditModal(index) {
+    const product = products[index];
+    document.getElementById("edit-index").value = index;
+    document.getElementById("edit-name").value = product.name;
+    document.getElementById("edit-description").value = product.message;
+    document.getElementById("edit-price").value = product.price;
+    document.getElementById("edit-category").value = product.category;
+    document.getElementById("current-image").src = product.image || "";
+    document.getElementById("edit-modal").style.display = "block";
+  }
+
+  function closeModal() {
+    document.getElementById("edit-modal").style.display = "none";
+  }
+
+  document.getElementById("edit-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const index = document.getElementById("edit-index").value;
+    const updatedProduct = {
+      ...products[index],
+      name: document.getElementById("edit-name").value,
+      message: document.getElementById("edit-description").value,
+      price: document.getElementById("edit-price").value,
+      category: document.getElementById("edit-category").value,
+    };
+
+    const imageInput = document.getElementById("edit-image");
+    if (imageInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        updatedProduct.image = reader.result;
+        saveEdit(index, updatedProduct);
+      };
+      reader.readAsDataURL(imageInput.files[0]);
+    } else {
+      saveEdit(index, updatedProduct);
+    }
+  });
+
+  function saveEdit(index, product) {
+    products[index] = product;
+    localStorage.setItem("products", JSON.stringify(products));
+    closeModal();
+    loadProducts();
+  }
+
+  window.onload = loadProducts;
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Courgette&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="add.product.css" />
+    <title>Shto Produkt</title>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="logo">
+          <img class="logo-img" src="logo1.png" alt="Logo" />
+        </div>
+        <div class="hamburger">&#9776;</div>
+        <ul class="menu">
+          <a href="addProduct.html"><li>Faqe Kryesore</li></a>
+          <a href="home.html#contact"><li>Kontakt</li></a>
+          <!-- Profile Button -->
+          <button class="Login-button" onclick="toggleProfilePopup()">
+            <li>Profili</li>
+          </button>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="form-section">
+      <div class="form-container">
+        <form
+          id="product-form"
+          action="#"
+          method="post"
+          class="custom-form"
+          role="form"
+        >
+          <h1>Shto Produkt</h1>
+
+          <div class="form-field">
+            <label for="name">Emri Produktit</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              class="form-control"
+              placeholder="Emri i produktit..."
+              required
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="message">Pershkrimi</label>
+            <textarea
+              class="form-control textarea"
+              id="message"
+              name="message"
+              placeholder="Pershkrimi i produktit..."
+            ></textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="image">Foto e Produktit</label>
+            <input
+              type="file"
+              name="image"
+              id="image"
+              class="form-control"
+              onchange="previewImage(event)"
+              Add
+              onchange
+              here
+            />
+            <img
+              id="image-preview"
+              style="display: none; width: 100px; margin-top: 10px"
+            />
+            <!-- Image preview -->
+          </div>
+
+          <div class="form-field">
+            <label for="kategorite">Kategorit</label>
+            <select name="kategorite" id="kategorite">
+              <option value="Perime">Perime</option>
+              <option value="Fruta">Fruta</option>
+              <option value="Bylmet">Bulmete</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="price">Cmimi</label>
+            <input
+              type="number"
+              name="price"
+              id="price"
+              class="form-control"
+              placeholder="Cmimi"
+              required
+              min="0"
+              step="0.01"
+            />
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="form-control2">Shto</button>
+
+            <button
+              type="button"
+              class="form-control2 cancel-btn"
+              onclick="window.location.href='index.html'"
+            >
+              Anullo
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ✅ Updated Profile Popup -->
+    <div id="profile-popup" class="profile-popup">
+      <div class="profile-header">Detajet e Profilit</div>
+      <div class="profile-info" id="profile-name">Emri:</div>
+      <div class="profile-info" id="profile-email">Email:</div>
+      <div class="profile-info" id="profile-status">Statusi:</div>
+      <button class="close-btn" onclick="toggleProfilePopup()">Mbyll</button>
+    </div>
+
+    <!-- ✅ JavaScript to load user from localStorage -->
+    <script>
+      function toggleProfilePopup() {
+        const popup = document.getElementById("profile-popup");
+        popup.classList.toggle("active");
+
+        // Load and display user data from localStorage
+        const userData = JSON.parse(localStorage.getItem("user"));
+        if (userData) {
+          document.getElementById("profile-name").textContent =
+            "Name: " + userData.name;
+          document.getElementById("profile-email").textContent =
+            "Email: " + (userData.email || "Not provided");
+          document.getElementById("profile-status").textContent =
+            "Statusi: " + (userData.status || "Unknown");
+        } else {
+          document.getElementById("profile-name").textContent = "Name: Guest";
+          document.getElementById("profile-email").textContent = "Email: -";
+          document.getElementById("profile-status").textContent = "Statusi: -";
+        }
+      }
+
+      // Optional: Hide profile popup on outside click
+      window.addEventListener("click", function (e) {
+        const popup = document.getElementById("profile-popup");
+        if (!popup.contains(e.target) && !e.target.closest(".Login-button")) {
+          popup.classList.remove("active");
+        }
+      });
+    </script>
+    <script>
+      document
+        .getElementById("product-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault(); // Stop form from submitting the traditional way
+
+          const name = document.getElementById("name").value;
+          const message = document.getElementById("message").value;
+          const imageInput = document.getElementById("image");
+          const category = document.getElementById("kategorite").value;
+          const price = document.getElementById("price").value;
+
+          // Convert image to base64 string (optional)
+          const reader = new FileReader();
+          reader.onload = function () {
+            const imageBase64 = reader.result;
+
+            const newProduct = {
+              name,
+              message,
+              image: imageBase64,
+              category,
+              price,
+            };
+
+            // Get existing products or initialize empty array
+            const existing = JSON.parse(localStorage.getItem("products")) || [];
+            existing.push(newProduct);
+
+            // Save updated array back to localStorage
+            localStorage.setItem("products", JSON.stringify(existing));
+
+            // Redirect to farmer page
+            window.location.href = "fermeri.html";
+          };
+
+          // If an image is selected, read it; otherwise, skip
+          if (imageInput.files[0]) {
+            reader.readAsDataURL(imageInput.files[0]);
+          } else {
+            // No image: save without it
+            const newProduct = {
+              name,
+              message,
+              image: null,
+              category,
+              price,
+            };
+
+            const existing = JSON.parse(localStorage.getItem("products")) || [];
+            existing.push(newProduct);
+            localStorage.setItem("products", JSON.stringify(existing));
+
+            window.location.href = "fermeri.html";
+          }
+        });
+    </script>
+  </body>
+</html>

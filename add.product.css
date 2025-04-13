@@ -1,0 +1,227 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poiret One", sans-serif;
+  font-weight: bolder;
+}
+
+body {
+  font-family: "Poiret One", sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-align: center;
+  font-family: "Courgette", cursive;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #4a4949;
+  padding: 15px 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.logo-img {
+  max-height: 80px;
+  border-radius: 40px;
+}
+
+.menu {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.menu li {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.menu a {
+  text-decoration: none;
+  color: white;
+}
+
+.Login-button {
+  background-color: #4a4949;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.form-section {
+  margin-top: 300px;
+  padding: 40px 50px;
+  width: 100%;
+  max-width: 800px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.form-field label {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Larger description box */
+.form-control.textarea {
+  height: 200px; /* Increased height */
+  width: 600px;
+  padding-top: 15px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+button.form-control2 {
+  width: 48%;
+  background-color: #00796b;
+  color: white;
+  padding: 12px 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.form-control2:hover {
+  background-color: #004d40;
+}
+
+button.cancel-btn {
+  background-color: #b71c1c;
+}
+
+button.cancel-btn:hover {
+  background-color: #7f0000;
+}
+
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* Profile Popup */
+.profile-popup {
+  display: none;
+  position: fixed;
+  top: 10%;
+  right: 10%;
+  background-color: #fff;
+  width: 300px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.profile-popup.active {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.profile-popup .profile-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #00796b;
+  border-bottom: 2px solid #00796b;
+  padding-bottom: 10px;
+}
+
+.profile-popup .profile-info {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.profile-popup .close-btn {
+  background-color: #b71c1c;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.profile-popup .close-btn:hover {
+  background-color: #7f0000;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .menu {
+    display: none;
+    position: absolute;
+    top: 85px;
+    left: 0;
+    right: 0;
+    background-color: #4a4949;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  .menu.active {
+    display: flex;
+  }
+
+  .form-section {
+    padding: 20px;
+    width: 100%;
+    margin-top: 100px;
+  }
+}

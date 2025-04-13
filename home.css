@@ -1,0 +1,260 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poiret One", sans-serif;
+  font-weight: bolder;
+}
+body {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  height: 100vh;
+  background-size: cover;
+  font-family: "Poiret One", sans-serif;
+  font-weight: 400;
+}
+
+.navbar {
+  display: flex;
+  will-change: transform;
+  align-items: center;
+  backdrop-filter: blur(20px);
+  justify-content: space-between;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  height: 85px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+.first-section {
+  display: flex;
+
+  align-items: center;
+  justify-content: start;
+  height: 70px;
+}
+
+.logo-img {
+  height: 80px;
+  padding-top: 5px;
+  border-radius: 40px;
+  margin-left: 40px;
+}
+
+.menu {
+  list-style: none;
+  display: flex;
+  gap: 35px;
+}
+.menu a:focus,
+.Login-button:focus {
+  outline-offset: 4px;
+}
+.menu li {
+  display: inline;
+}
+.menu a {
+  text-decoration: none;
+  color: black;
+  font-weight: bolder;
+  font-size: 1.8em;
+  padding: 8px 8px 8px 8px;
+  border-radius: 6px;
+}
+.menu a:hover {
+  background-color: rgb(138, 137, 137);
+  transition: 1s;
+}
+
+.Big-Container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.popular-tours {
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.popular-tours h1 {
+  font-size: 46px;
+  margin-bottom: 60px;
+}
+
+.tour-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  flex-direction: column;
+}
+
+.bio {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.bio img {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  height: 300px;
+}
+
+.bio h3 {
+  margin: 20px 0;
+  font-size: 3em;
+}
+
+.bio p {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.bio a {
+  text-decoration: none;
+  color: #ff5722;
+  font-weight: bold;
+}
+
+.testimonials {
+  background-color: #f4f4f4;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.testimonials h2 {
+  font-size: 3em;
+  margin-bottom: 40px;
+}
+
+.testimonial-grid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+.testimonial p {
+  font-size: 1.5em;
+}
+
+.testimonial {
+  max-width: 300px;
+}
+
+.why-choose-us {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.why-choose-us ul {
+  list-style: none;
+}
+
+.why-choose-us ul li {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+footer {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+footer ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 35px;
+}
+.location_main {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+.call_text {
+  width: 100%;
+  float: left;
+  font-size: 16px;
+  color: #ffffff;
+  padding-top: 20px;
+}
+.call_text a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.social_icon li {
+  float: left;
+  padding: 30px 5px;
+}
+.social_icon ul {
+  margin-top: 0;
+}
+
+.social_icon {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 40px;
+  clear: left;
+}
+.social_icon h2 {
+  margin: 20px 0 0 40px;
+}
+.hamburger {
+  display: none;
+  font-size: 2em;
+  cursor: pointer;
+  user-select: none;
+}
+@media (max-width: 992px) {
+  .tour-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .tour-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .testimonial-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .menu {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .menu {
+    display: none;
+    flex-direction: column;
+    background-color: white;
+    position: absolute;
+    top: 85px;
+    right: 0;
+    left: 0;
+    padding: 20px;
+    z-index: 99;
+  }
+
+  .menu.active {
+    display: flex;
+  }
+}

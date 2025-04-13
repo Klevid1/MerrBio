@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kosumatori</title>
+
+    <link rel="stylesheet" href="konsumatori.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Courgette&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Courgette&family=Poiret+One&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <nav class="navbar" style="grid-area: navbar">
+      <div class="logo">
+        <a href="konsumatori.html"> <img src="logo1.png" alt="" /></a>
+      </div>
+
+      <div class="menu">
+        <a href="konsumatori.html">Faqja kryesore</a>
+
+        <div class="dropdown">
+          <button class="dropbtn">
+            Filtro<ion-icon name="chevron-down-outline"></ion-icon>
+          </button>
+          <div class="dropdown-content">
+            <label for="filter">Sipas kategorisë:</label>
+            <select id="filter" onchange="loadProducts()" style="margin: 10px">
+              <option value="all">Të gjitha</option>
+              <option value="Perime">Perime</option>
+              <option value="Fruta">Fruta</option>
+              <option value="Bylmet">Bulmete</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="Login-button" onclick="toggleProfilePopup()">
+          <li>Profili</li>
+        </button>
+      </div>
+    </nav>
+
+    <div class="search" style="grid-area: search">
+      <input
+        type="text"
+        placeholder="Kerkoni produktin qe deshironi"
+        class="srch-prod"
+        oninput="loadProducts()"
+      />
+      <button><ion-icon name="search-outline"></ion-icon></button>
+    </div>
+
+    <!-- Profile Popup -->
+    <div id="profile-popup" class="profile-popup">
+      <div class="profile-header">Detajet e Profilit</div>
+      <div class="profile-info" id="profile-name">Emri:</div>
+      <div class="profile-info" id="profile-email">Email:</div>
+      <div class="profile-info" id="profile-status">Statusi:</div>
+      <button class="close-btn" onclick="toggleProfilePopup()">Mbyll</button>
+    </div>
+
+    <h1
+      style="
+        text-align: start;
+        font-family: 'Courgette', cursive;
+        margin-top: 120px;
+        margin-left: 80px;
+      "
+    >
+      Produktet e Mia
+    </h1>
+
+    <!-- Product Display Area -->
+    <div id="product-list" class="product-list-container"></div>
+
+    <script>
+      function toggleProfilePopup() {
+        const popup = document.getElementById("profile-popup");
+        popup.classList.toggle("active");
+        const userData = JSON.parse(localStorage.getItem("user"));
+        if (userData) {
+          document.getElementById("profile-name").textContent =
+            "Name: " + userData.name;
+          document.getElementById("profile-email").textContent =
+            "Email: " + (userData.email || "Not provided");
+          document.getElementById("profile-status").textContent =
+            "Statusi: " + (userData.status || "Unknown");
+        } else {
+          document.getElementById("profile-name").textContent = "Name: Guest";
+          document.getElementById("profile-email").textContent = "Email: -";
+          document.getElementById("profile-status").textContent = "Statusi: -";
+        }
+      }
+    </script>
+
+    <script>
+      let products = JSON.parse(localStorage.getItem("products")) || [];
+
+      function loadProducts() {
+        const categoryFilter = document
+          .getElementById("filter")
+          .value.toLowerCase();
+        const searchTerm = document
+          .querySelector(".srch-prod")
+          .value.toLowerCase();
+        const container = document.getElementById("product-list");
+        container.innerHTML = "";
+
+        const filtered = products.filter((p) => {
+          const matchesCategory =
+            categoryFilter === "all" ||
+            p.category.toLowerCase() === categoryFilter;
+          const matchesSearch = p.name.toLowerCase().includes(searchTerm);
+          return matchesCategory && matchesSearch;
+        });
+
+        if (filtered.length === 0) {
+          container.innerHTML =
+            "<p style='padding: 20px;'>Nuk u gjet asnjë produkt.</p>";
+        }
+
+        filtered.forEach((product, index) => {
+          const card = document.createElement("div");
+          card.className = "product-card";
+          card.innerHTML = `
+                    ${
+                      product.image
+                        ? `<img src="${product.image}" alt="${product.name}" />`
+                        : ""
+                    }
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p><strong>Pershkrimi:</strong> ${product.message}</p>
+                        <p><strong>Kategoria:</strong> ${product.category}</p>
+                        <p><strong>Cmimi:</strong> €${product.price}</p>
+                    </div>
+                    <div class="button-group">
+                        <button class="product-btn buy-btn" onclick="buyProduct(${index})">Blej</button>
+                    </div>
+                `;
+          container.appendChild(card);
+        });
+      }
+
+      function buyProduct(index) {
+        const product = products[index];
+        alert(
+          `Ju keni zgjedhur të blini produktin: ${product.name} për €${product.price}`
+        );
+      }
+      window.onload = loadProducts;
+    </script>
+  </body>
+</html>

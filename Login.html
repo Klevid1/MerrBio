@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log in for best experience</title>
+    <link rel="stylesheet" href="login.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Courgette&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Courgette&family=Poiret+One&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="first-section">
+          <div class="logo">
+            <img class="logo-img" src="logo1.png" alt="" />
+          </div>
+        </div>
+        <div class="hamburger">&#9776;</div>
+        <ul class="menu">
+          <a href="home.html"><li>Faqe Kryesore</li></a>
+          <a href="home.html#contact"><li>Kontakt</li></a>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <!-- Login Form -->
+      <div class="container-box" id="login-form">
+        <h2>Identifikohu</h2>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+          <input type="text" id="login-user" required />
+          <label>Emri</label>
+        </div>
+        <div class="input-box">
+          <span class="icon"
+            ><ion-icon name="lock-closed-outline"></ion-icon
+          ></span>
+          <input type="password" id="login-password" required />
+          <label>Fjalëkalimin</label>
+        </div>
+        <button onclick="loginUser()">Identifikohu</button>
+        <div class="links">
+          <a href="#" onclick="showForgotPassword()"
+            >Keni harruar fjalëkalimin?</a
+          >
+          |
+          <a href="#" onclick="showRegister()">Regjistrohu</a>
+        </div>
+      </div>
+
+      <!-- Register Form -->
+      <div class="container-box" id="register-form" style="display: none">
+        <h2>Regjistrohu</h2>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+          <input type="text" id="register-name" required />
+          <label>Emri i Plote</label>
+        </div>
+
+        <div class="input-box">
+          <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+          <input type="email" id="register-email" required />
+          <label>Email</label>
+        </div>
+
+        <div class="input-box">
+          <span class="icon"
+            ><ion-icon name="lock-closed-outline"></ion-icon
+          ></span>
+          <input type="password" id="register-password" required />
+          <label>Fjalëkalimi</label>
+        </div>
+        <div class="input-box">
+          <span class="icon"
+            ><ion-icon name="person-circle-outline"></ion-icon
+          ></span>
+
+          <select id="register-role" required>
+            <option value="" disabled selected>Zgjidh Statusin</option>
+            <option value="Fermer">Fermer</option>
+            <option value="Konsumator">Konsumator</option>
+          </select>
+        </div>
+        <button onclick="registerUser()">Regjistrohu</button>
+        <div class="links">
+          <a href="#" onclick="showLogin()">Kthehu Te Identifikimi</a>
+        </div>
+      </div>
+
+      <!-- Forgot Password Form -->
+      <div class="container-box" id="forget-form" style="display: none">
+        <h2>Harruat Fjalëkalimin</h2>
+        <div class="input-box">
+          <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
+          <input type="email" id="forgot-password" required />
+          <label>Email</label>
+        </div>
+        <button onclick="resetPassword()">Rivendos fjalëkalimin</button>
+        <div class="links">
+          <a href="#" onclick="showLogin()">Kthehu Te Login</a>
+        </div>
+      </div>
+    </main>
+      <!-- Toast Notifications -->
+      <div id="toast" class="toast"></div>
+    </main>
+
+    <script>
+      function showLogin() {
+        document.getElementById("login-form").style.display = "block";
+        document.getElementById("register-form").style.display = "none";
+        document.getElementById("forget-form").style.display = "none";
+      }
+
+      function showRegister() {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("register-form").style.display = "block";
+        document.getElementById("forget-form").style.display = "none";
+      }
+
+      function showForgotPassword() {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("register-form").style.display = "none";
+        document.getElementById("forget-form").style.display = "block";
+      }
+
+      function registerUser() {
+        let name = document.getElementById("register-name").value;
+        let email = document.getElementById("register-email").value;
+        let password = document.getElementById("register-password").value;
+        let status = document.getElementById("register-role").value;
+
+        if (name && email && password && status) {
+          const user = {
+            name: name,
+            email: email,
+            password: password,
+            status: status,
+          };
+
+          localStorage.setItem("user", JSON.stringify(user));
+         showToast("Registration successful! ✅");
+
+          showLogin();
+        } else {
+         showToast("Please fill out all fields.");
+        }
+        
+      }
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+
+      function loginUser() {
+        let username = document.getElementById("login-user").value;
+        let password = document.getElementById("login-password").value;
+
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        if (user && username === user.name && password === user.password) {
+          showToast("Login successful! 🎉");
+         
+      setTimeout(() => {
+      if (user.status === "Konsumator") {
+        window.location.href = "konsumatori.html"; // Change to your konsumator page
+      } else if (user.status === "Fermer") {
+        window.location.href = "fermeri.html"; // Change to your fermer page
+      }
+    }, 1000); // Delay to allow toast to show
+        } else {
+          showToast("Invalid credentials. Try again! ❌");
+        }
+      }
+
+      function resetPassword() {
+        let email = document.getElementById("forgot-password").value;
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        if (user && email === user.email) {
+         showToast(`Password reset link sent to ${email} 📩`);
+          showLogin();
+        } else {
+         showToast("Email not found. Please register or try again.");
+        }
+      }
+
+      const hamburger = document.querySelector(".hamburger");
+      const menu = document.querySelector(".menu");
+
+      hamburger.addEventListener("click", () => {
+        menu.classList.toggle("active");
+      });
+    </script>
+
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>
